@@ -1,0 +1,70 @@
+<svg height="1070" width="720" xmlns="http://www.w3.org/2000/svg">
+<rect height="1070" fill="#555" width="720"></rect>
+<text fill="#7f7" font-family="Courier New" font-size="12" xml:space="preserve">
+<tspan x="10" y="26">└─┬ onchange@3.2.1 </tspan>
+<tspan x="10" y="42">  ├── arrify@1.0.1 </tspan>
+<tspan x="10" y="58">  ├─┬ chokidar@1.6.1 </tspan>
+<tspan x="10" y="74">  │ ├─┬ anymatch@1.3.0 </tspan>
+<tspan x="10" y="90">  │ │ └─┬ micromatch@2.3.11 </tspan>
+<tspan x="10" y="106">  │ │   ├─┬ arr-diff@2.0.0 </tspan>
+<tspan x="10" y="122">  │ │   │ └── arr-flatten@1.0.1 </tspan>
+<tspan x="10" y="138">  │ │   ├── array-unique@0.2.1 </tspan>
+<tspan x="10" y="154">  │ │   ├─┬ braces@1.8.5 </tspan>
+<tspan x="10" y="170">  │ │   │ ├─┬ expand-range@1.8.2 </tspan>
+<tspan x="10" y="186">  │ │   │ │ └─┬ fill-range@2.2.3 </tspan>
+<tspan x="10" y="202">  │ │   │ │   ├── is-number@2.1.0 </tspan>
+<tspan x="10" y="218">  │ │   │ │   ├── isobject@2.1.0 </tspan>
+<tspan x="10" y="234">  │ │   │ │   ├── randomatic@1.1.6 </tspan>
+<tspan x="10" y="250">  │ │   │ │   └── repeat-string@1.6.1 </tspan>
+<tspan x="10" y="266">  │ │   │ ├── preserve@0.2.0 </tspan>
+<tspan x="10" y="282">  │ │   │ └── repeat-element@1.1.2 </tspan>
+<tspan x="10" y="298">  │ │   ├─┬ expand-brackets@0.1.5 </tspan>
+<tspan x="10" y="314">  │ │   │ └── is-posix-bracket@0.1.1 </tspan>
+<tspan x="10" y="330">  │ │   ├── extglob@0.3.2 </tspan>
+<tspan x="10" y="346">  │ │   ├── filename-regex@2.0.0 </tspan>
+<tspan x="10" y="362">  │ │   ├─┬ kind-of@3.1.0 </tspan>
+<tspan x="10" y="378">  │ │   │ └── is-buffer@1.1.5 </tspan>
+<tspan x="10" y="394">  │ │   ├─┬ normalize-path@2.1.1 </tspan>
+<tspan x="10" y="410">  │ │   │ └── remove-trailing-separator@1.0.1 </tspan>
+<tspan x="10" y="426">  │ │   ├─┬ object.omit@2.0.1 </tspan>
+<tspan x="10" y="442">  │ │   │ ├─┬ for-own@0.1.5 </tspan>
+<tspan x="10" y="458">  │ │   │ │ └── for-in@1.0.2 </tspan>
+<tspan x="10" y="474">  │ │   │ └── is-extendable@0.1.1 </tspan>
+<tspan x="10" y="490">  │ │   ├─┬ parse-glob@3.0.4 </tspan>
+<tspan x="10" y="506">  │ │   │ ├── glob-base@0.3.0 </tspan>
+<tspan x="10" y="522">  │ │   │ └── is-dotfile@1.0.2 </tspan>
+<tspan x="10" y="538">  │ │   └─┬ regex-cache@0.4.3 </tspan>
+<tspan x="10" y="554">  │ │     ├── is-equal-shallow@0.1.3 </tspan>
+<tspan x="10" y="570">  │ │     └── is-primitive@2.0.0 </tspan>
+<tspan x="10" y="586">  │ ├── async-each@1.0.1 </tspan>
+<tspan x="10" y="602">  │ ├── glob-parent@2.0.0 </tspan>
+<tspan x="10" y="618">  │ ├── inherits@2.0.3 </tspan>
+<tspan x="10" y="634">  │ ├─┬ is-binary-path@1.0.1 </tspan>
+<tspan x="10" y="650">  │ │ └── binary-extensions@1.8.0 </tspan>
+<tspan x="10" y="666">  │ ├─┬ is-glob@2.0.1 </tspan>
+<tspan x="10" y="682">  │ │ └── is-extglob@1.0.0 </tspan>
+<tspan x="10" y="698">  │ ├── path-is-absolute@1.0.1 </tspan>
+<tspan x="10" y="714">  │ └─┬ readdirp@2.1.0 </tspan>
+<tspan x="10" y="730">  │   ├── graceful-fs@4.1.11 </tspan>
+<tspan x="10" y="746">  │   ├─┬ minimatch@3.0.3 </tspan>
+<tspan x="10" y="762">  │   │ └─┬ brace-expansion@1.1.6 </tspan>
+<tspan x="10" y="778">  │   │   ├── balanced-match@0.4.2 </tspan>
+<tspan x="10" y="794">  │   │   └── concat-map@0.0.1 </tspan>
+<tspan x="10" y="810">  │   ├─┬ readable-stream@2.2.6 </tspan>
+<tspan x="10" y="826">  │   │ ├── buffer-shims@1.0.0 </tspan>
+<tspan x="10" y="842">  │   │ ├── core-util-is@1.0.2 </tspan>
+<tspan x="10" y="858">  │   │ ├── isarray@1.0.0 </tspan>
+<tspan x="10" y="874">  │   │ ├── process-nextick-args@1.0.7 </tspan>
+<tspan x="10" y="890">  │   │ ├── string_decoder@0.10.31 </tspan>
+<tspan x="10" y="906">  │   │ └── util-deprecate@1.0.2 </tspan>
+<tspan x="10" y="922">  │   └── set-immediate-shim@1.0.1 </tspan>
+<tspan x="10" y="938">  ├─┬ cross-spawn@4.0.2 </tspan>
+<tspan x="10" y="954">  │ ├─┬ lru-cache@4.0.2 </tspan>
+<tspan x="10" y="970">  │ │ ├── pseudomap@1.0.2 </tspan>
+<tspan x="10" y="986">  │ │ └── yallist@2.1.2 </tspan>
+<tspan x="10" y="1002">  │ └─┬ which@1.2.14 </tspan>
+<tspan x="10" y="1018">  │   └── isexe@2.0.0 </tspan>
+<tspan x="10" y="1034">  ├── minimist@1.2.0 </tspan>
+<tspan x="10" y="1050">  └── tree-kill@1.1.0</tspan>
+</text>
+</svg>
