@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/Qard/onchange"
-
-    >onchange (v3.2.1)</a>
+    <a href="https://github.com/Qard/onchange">onchange (v3.2.1)</a>
 </h1>
 <h4>Use glob patterns to watch file sets and run a command when anything is added, changed or deleted.</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.onchange">module onchange</a><ol>
 
@@ -104,11 +97,11 @@
   var stdout = opts.stdout || process.stdout
   var stderr = opts.stderr || process.stderr
   var delay = Number(opts.delay) || 0
-  var killSignal = opts.killSignal || &#x27;SIGTERM&#x27;
-  var outpipe = typeof opts.outpipe === &#x27;string&#x27; ? outpipetmpl(opts.outpipe) : undefined
+  var killSignal = opts.killSignal || 'SIGTERM'
+  var outpipe = typeof opts.outpipe === 'string' ? outpipetmpl(opts.outpipe) : undefined
 
-  if (!command &#x26;&#x26; !outpipe) {
-    throw new TypeError(&#x27;Expected &#x22;command&#x22; and/or &#x22;outpipe&#x22; to be specified&#x27;)
+  if (!command &amp;&amp; !outpipe) {
+    throw new TypeError('Expected "command" and/or "outpipe" to be specified')
   }
 
   var childOutpipe
@@ -122,13 +115,13 @@
   var watcher = chokidar.watch(matches, {
     cwd: cwd,
     ignored: opts.exclude || [],
-    usePolling: opts.poll === true || typeof opts.poll === &#x27;number&#x27;,
-    interval: typeof opts.poll === &#x27;number&#x27; ? opts.poll : undefined
+    usePolling: opts.poll === true || typeof opts.poll === 'number',
+    interval: typeof opts.poll === 'number' ? opts.poll : undefined
   })
 
   // Logging
   var log = opts.verbose ? function log (message) {
-    stdout.write(&#x27;onchange: &#x27; + message + &#x27;\n&#x27;)
+    stdout.write('onchange: ' + message + '\n')
   } : function () {}
 
 <span class="apidocCodeCommentSpan">  /**
@@ -146,7 +139,7 @@
         clearTimeout(pendingTimeout)
       }
 
-      if (delay &#x3e; 0) {
+      if (delay &gt; 0) {
         pendingTimeout = setTimeout(function () {
           cleanstart(pendingOpts)
         }, delay)
@@ -176,15 +169,15 @@
 
       if (!pendingExit) {
         if (wait) {
-          log(&#x27;waiting for process and restarting&#x27;)
+          log('waiting for process and restarting')
         } else {
           if (childCommand) {
-            log(&#x27;killing command &#x27; + childCommand.pid + &#x27; and restarting&#x27;)
+            log('killing command ' + childCommand.pid + ' and restarting')
             kill(childCommand.pid, killSignal)
           }
 
           if (childOutpipe) {
-            log(&#x27;killing outpipe &#x27; + childOutpipe.pid + &#x27; and restarting&#x27;)
+            log('killing outpipe ' + childOutpipe.pid + ' and restarting')
             kill(childOutpipe.pid, killSignal)
           }
         }
@@ -200,7 +193,7 @@
     if (outpipe) {
       var filtered = outpipe(opts)
 
-      log(&#x27;executing outpipe &#x22;&#x27; + filtered + &#x27;&#x22;&#x27;)
+      log('executing outpipe "' + filtered + '"')
 
       childOutpipe = exec(filtered, {
         cwd: cwd
@@ -210,8 +203,8 @@
       childOutpipe.stdout.pipe(stdout)
       childOutpipe.stderr.pipe(stderr)
 
-      childOutpipe.on(&#x27;exit&#x27;, function (code, signal) {
-        log(&#x27;outpipe &#x27; + (code == null ? &#x27;exited with &#x27; + signal : &#x27;completed with code &#x27; + code))
+      childOutpipe.on('exit', function (code, signal) {
+        log('outpipe ' + (code == null ? 'exited with ' + signal : 'completed with code ' + code))
 
         childOutpipe = null
 
@@ -225,15 +218,15 @@
         return tmpl(opts)
       })
 
-      log(&#x27;executing command &#x22;&#x27; + [command].concat(filtered).join(&#x27; &#x27;) + &#x27;&#x22;&#x27;)
+      log('executing command "' + [command].concat(filtered).join(' ') + '"')
 
       childCommand = spawn(command, filtered, {
         cwd: cwd,
-        stdio: [&#x27;ignore&#x27;, childOutpipe ? childOutpipe.stdin : stdout, stderr]
+        stdio: ['ignore', childOutpipe ? childOutpipe.stdin : stdout, stderr]
       })
 
-      childCommand.on(&#x27;exit&#x27;, function (code, signal) {
-        log(&#x27;command &#x27; + (code == null ? &#x27;exited with &#x27; + signal : &#x27;completed with code &#x27; + code))
+      childCommand.on('exit', function (code, signal) {
+        log('command ' + (code == null ? 'exited with ' + signal : 'completed with code ' + code))
 
         childCommand = null
 
@@ -245,17 +238,17 @@
     }
   }
 
-  watcher.on(&#x27;ready&#x27;, function () {
-    log(&#x27;watching &#x27; + matches.join(&#x27;, &#x27;))
+  watcher.on('ready', function () {
+    log('watching ' + matches.join(', '))
 
     // Execute initial event, without changed options.
     if (initial) {
-      start({ event: &#x27;&#x27;, changed: &#x27;&#x27; })
+      start({ event: '', changed: '' })
     }
 
     // For any change, creation or deletion, try to run.
     // Restart if the last run is still active.
-    watcher.on(&#x27;all&#x27;, function (event, changed) {
+    watcher.on('all', function (event, changed) {
       // Log the event and the file affec ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -284,3 +277,4 @@
     ]
 </div>
 </div>
+</body></html>

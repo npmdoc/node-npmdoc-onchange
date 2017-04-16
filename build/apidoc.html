@@ -61,12 +61,220 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.onchange">module onchange</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.onchange.onchange">
+            function <span class="apidocSignatureSpan"></span>onchange
+            <span class="apidocSignatureSpan">(match, command, args, opts)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.onchange.toString">
+            function <span class="apidocSignatureSpan">onchange.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.onchange" id="apidoc.module.onchange">module onchange</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.onchange.onchange" id="apidoc.element.onchange.onchange">
+        function <span class="apidocSignatureSpan"></span>onchange
+        <span class="apidocSignatureSpan">(match, command, args, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">onchange = function (match, command, args, opts) {
+  opts = opts || {}
+
+  var matches = arrify(match)
+  var initial = !!opts.initial
+  var wait = !!opts.wait
+  var cwd = opts.cwd ? resolve(opts.cwd) : process.cwd()
+  var stdout = opts.stdout || process.stdout
+  var stderr = opts.stderr || process.stderr
+  var delay = Number(opts.delay) || 0
+  var killSignal = opts.killSignal || &#x27;SIGTERM&#x27;
+  var outpipe = typeof opts.outpipe === &#x27;string&#x27; ? outpipetmpl(opts.outpipe) : undefined
+
+  if (!command &#x26;&#x26; !outpipe) {
+    throw new TypeError(&#x27;Expected &#x22;command&#x22; and/or &#x22;outpipe&#x22; to be specified&#x27;)
+  }
+
+  var childOutpipe
+  var childCommand
+  var pendingOpts
+  var pendingTimeout
+  var pendingExit = false
+
+  // Convert arguments to templates
+  var tmpls = args ? args.map(tmpl) : []
+  var watcher = chokidar.watch(matches, {
+    cwd: cwd,
+    ignored: opts.exclude || [],
+    usePolling: opts.poll === true || typeof opts.poll === &#x27;number&#x27;,
+    interval: typeof opts.poll === &#x27;number&#x27; ? opts.poll : undefined
+  })
+
+  // Logging
+  var log = opts.verbose ? function log (message) {
+    stdout.write(&#x27;onchange: &#x27; + message + &#x27;\n&#x27;)
+  } : function () {}
+
+<span class="apidocCodeCommentSpan">  /**
+   * Run when the script exits.
+   */
+</span>  function onexit () {
+    if (childOutpipe || childCommand) {
+      return
+    }
+
+    pendingExit = false
+
+    if (pendingOpts) {
+      if (pendingTimeout) {
+        clearTimeout(pendingTimeout)
+      }
+
+      if (delay &#x3e; 0) {
+        pendingTimeout = setTimeout(function () {
+          cleanstart(pendingOpts)
+        }, delay)
+      } else {
+        cleanstart(pendingOpts)
+      }
+    }
+  }
+
+  /**
+   * Run on fresh start (after exists, clears pending args).
+   */
+  function cleanstart (args) {
+    pendingOpts = null
+    pendingTimeout = null
+
+    return start(args)
+  }
+
+  /**
+   * Start the script.
+   */
+  function start (opts) {
+    // Set pending options for next execution.
+    if (childOutpipe || childCommand) {
+      pendingOpts = opts
+
+      if (!pendingExit) {
+        if (wait) {
+          log(&#x27;waiting for process and restarting&#x27;)
+        } else {
+          if (childCommand) {
+            log(&#x27;killing command &#x27; + childCommand.pid + &#x27; and restarting&#x27;)
+            kill(childCommand.pid, killSignal)
+          }
+
+          if (childOutpipe) {
+            log(&#x27;killing outpipe &#x27; + childOutpipe.pid + &#x27; and restarting&#x27;)
+            kill(childOutpipe.pid, killSignal)
+          }
+        }
+
+        pendingExit = true
+      }
+    }
+
+    if (pendingTimeout || pendingOpts) {
+      return
+    }
+
+    if (outpipe) {
+      var filtered = outpipe(opts)
+
+      log(&#x27;executing outpipe &#x22;&#x27; + filtered + &#x27;&#x22;&#x27;)
+
+      childOutpipe = exec(filtered, {
+        cwd: cwd
+      })
+
+      // Must pipe stdout and stderr.
+      childOutpipe.stdout.pipe(stdout)
+      childOutpipe.stderr.pipe(stderr)
+
+      childOutpipe.on(&#x27;exit&#x27;, function (code, signal) {
+        log(&#x27;outpipe &#x27; + (code == null ? &#x27;exited with &#x27; + signal : &#x27;completed with code &#x27; + code))
+
+        childOutpipe = null
+
+        return onexit()
+      })
+    }
+
+    if (command) {
+      // Generate argument strings from templates.
+      var filtered = tmpls.map(function (tmpl) {
+        return tmpl(opts)
+      })
+
+      log(&#x27;executing command &#x22;&#x27; + [command].concat(filtered).join(&#x27; &#x27;) + &#x27;&#x22;&#x27;)
+
+      childCommand = spawn(command, filtered, {
+        cwd: cwd,
+        stdio: [&#x27;ignore&#x27;, childOutpipe ? childOutpipe.stdin : stdout, stderr]
+      })
+
+      childCommand.on(&#x27;exit&#x27;, function (code, signal) {
+        log(&#x27;command &#x27; + (code == null ? &#x27;exited with &#x27; + signal : &#x27;completed with code &#x27; + code))
+
+        childCommand = null
+
+        return onexit()
+      })
+    } else {
+      // No data to write to `outpipe`.
+      childOutpipe.stdin.end()
+    }
+  }
+
+  watcher.on(&#x27;ready&#x27;, function () {
+    log(&#x27;watching &#x27; + matches.join(&#x27;, &#x27;))
+
+    // Execute initial event, without changed options.
+    if (initial) {
+      start({ event: &#x27;&#x27;, changed: &#x27;&#x27; })
+    }
+
+    // For any change, creation or deletion, try to run.
+    // Restart if the last run is still active.
+    watcher.on(&#x27;all&#x27;, function (event, changed) {
+      // Log the event and the file affec ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.onchange.toString" id="apidoc.element.onchange.toString">
+        function <span class="apidocSignatureSpan">onchange.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return toString;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 </div>
 
